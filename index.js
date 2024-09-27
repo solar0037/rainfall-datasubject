@@ -2,6 +2,7 @@ import express, { json, static as serveStatic } from 'express';
 import { fileURLToPath } from 'url';
 import { join, dirname } from 'path';
 import { interpolate, calculateValues, generateRainfallMap } from './calc.js';
+// import { getRainfallValues } from './bt.js';
 
 const app = express();
 const port = 3000;
@@ -16,6 +17,13 @@ app.get('/', (req, res) => {
         { x: 0, y: 1, value: 30 },
         { x: 1, y: 1, value: 40 }
     ];
+    // TODO: points value 블루투스 송신 값으로 바꾸기
+    // const points = [
+    //     { x: 0, y: 0, value: getRainfallValues() },
+    //     { x: 1, y: 0, value: 20 },
+    //     { x: 0, y: 1, value: 30 },
+    //     { x: 1, y: 1, value: 40 }
+    // ];
     const results = calculateValues(points);
     generateRainfallMap(results);
     const filePath = join(__dirname, 'views', 'index.html');
