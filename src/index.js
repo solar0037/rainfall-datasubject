@@ -1,22 +1,26 @@
 import express, { json, static as serveStatic } from 'express';
 import { fileURLToPath } from 'url';
 import { join, dirname } from 'path';
-import { interpolate, calculateValues } from './calc.js';
-
-const points = [
-    { x: 0, y: 0, value: 0 },
-    { x: 1, y: 1, value: 1 },
-    { x: 2, y: 2, value: 2 },
-    { x: 3, y: 3, value: 3 }
-];
-
-const results = calculateValues(points);
-console.log(results);
+import { interpolate, calculateValues, generateRainfallMap } from './calc.js';
 
 const app = express();
 const port = 3000;
 
 app.use(json());
+
+app.get('/', (req, res) => {
+    // TODO: points 랜덤 값으로 바꾸기
+    const points = [
+        { x: 0, y: 0, value: 10 },
+        { x: 1, y: 0, value: 20 },
+        { x: 0, y: 1, value: 30 },
+        { x: 1, y: 1, value: 40 }
+    ];
+    const results = calculateValues(points);
+    generateRainfallMap(results);
+    const filePath = join(__dirname, 'views', 'index.html');
+    res.sendFile(filePath);
+})
 
 // Interpolation endpoint
 app.post('/interpolate', (req, res) => {
