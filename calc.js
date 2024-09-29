@@ -15,7 +15,9 @@ function calculateValues(points) {
 
     // Interpolate between each pair of points
     for (let i = 0; i < points.length; i++) {
+        if (!points[i].isActivated) continue;
         for (let j = i + 1; j < points.length; j++) {
+            if (!points[j].isActivated) continue;
             for (let t = 0; t <= 1; t += 0.1) { // Adjust step size as needed
                 let interpolatedPoint = interpolate(points[i], points[j], t);
                 results.push(interpolatedPoint);

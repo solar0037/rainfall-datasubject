@@ -2,7 +2,7 @@ import express, { json, static as serveStatic } from 'express';
 import { fileURLToPath } from 'url';
 import { join, dirname } from 'path';
 import { interpolate, calculateValues, generateRainfallMap } from './calc.js';
-// import { getRainfallValues } from './bt.js';
+// import { getUmbrellaData } from './bt.js';
 
 const app = express();
 const port = 3000;
@@ -12,14 +12,15 @@ app.use(json());
 app.get('/', (req, res) => {
     // TODO: points 랜덤 값으로 바꾸기
     const points = [
-        { x: 0, y: 0, value: 10 },
-        { x: 1, y: 0, value: 20 },
-        { x: 0, y: 1, value: 30 },
-        { x: 1, y: 1, value: 40 }
+        { x: 0, y: 0, value: 10, isActivated: 1 },
+        { x: 1, y: 0, value: 20, isActivated: 1 },
+        { x: 0, y: 1, value: 30, isActivated: 0 },
+        { x: 1, y: 1, value: 40, isActivated: 1 }
     ];
     // TODO: points value 블루투스 송신 값으로 바꾸기
+    // const { rainfallValue, isActivated } = getUmbrellaData();
     // const points = [
-    //     { x: 0, y: 0, value: getRainfallValues() },
+    //     { x: 0, y: 0, value: rainfallValue, isActivated },
     //     { x: 1, y: 0, value: 20 },
     //     { x: 0, y: 1, value: 30 },
     //     { x: 1, y: 1, value: 40 }

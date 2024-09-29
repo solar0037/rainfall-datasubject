@@ -8,12 +8,14 @@ const port = new SerialPort('COM3', {
 
 const parser = port.pipe(new Readline({ delimiter: '\r\n' }));
 
-let rainfallValues = [];
+let rainfallValue;
+let isActivated;
 
 // 시리얼 포트로부터 데이터 읽기
 parser.on('data', (data) => {
   console.log(`Received data: ${data}`);
-  rainfallValues = data;
+  rainfallValue = data.includes('강수량') ? parseInt((data.replace('강수량: ', ''))) : null;
+  isActivated = data.includes('플렉스') ? parseInt((data.replace('플렉스 센서 값: ', ''))) : null;
 });
 
 // 시리얼 포트 오류 처리
@@ -21,8 +23,11 @@ port.on('error', (err) => {
   console.error('Error: ', err.message);
 });
 
-function getRainfallValues() {
-    return rainfallValues;
+function getUmbrellaData() {
+    return {
+        rainfallValue,
+        isActivated
+    };
 }
 
-export { getRainfallValues };
+export { getUmbrellaData };
