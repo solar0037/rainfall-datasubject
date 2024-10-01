@@ -2,10 +2,16 @@ import fs from 'fs';
 
 // Function to linearly interpolate between two points
 function interpolate(p1, p2, t) {
+    const x = p1.x + (p2.x - p1.x) * t;
+    const y = p1.y + (p2.y - p1.y) * t;
+    const alpha = [1,0.85,0.70,0.55,0.40,
+        0.35,0.25,0.15,0.10,0.05,0];
+    const index = Math.round(t*10);
     return {
-        x: p1.x + (p2.x - p1.x) * t,
-        y: p1.y + (p2.y - p1.y) * t,
-        value: Math.round(p1.value + (p2.value - p1.value) * t)
+        x,
+        y,
+        // value: Math.round(p1.value + (p2.value - p1.value) * t)
+        value: Math.round(p2.value + (p1.value-p2.value)*alpha[index])
     };
 }
 
@@ -14,9 +20,11 @@ function calculateValues(points) {
     let results = [];
 
     // Interpolate between each pair of points
+    const maxValue = Math.max(...points.map(point => point.value));
     for (let i = 0; i < points.length; i++) {
         if (!points[i].isActivated) continue;
-        for (let j = i + 1; j < points.length; j++) {
+        if (points[i].value!==maxValue) continue;
+        for (let j = 0; j < points.length; j++) {
             if (!points[j].isActivated) continue;
             for (let t = 0; t <= 1; t += 0.1) { // Adjust step size as needed
                 let interpolatedPoint = interpolate(points[i], points[j], t);

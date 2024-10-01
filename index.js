@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import { join, dirname } from 'path';
 import { interpolate, calculateValues, generateRainfallMap } from './calc.js';
 // import { getUmbrellaData } from './bt.js';
+import { sendDataToFirebase } from './fb.js';
 
 const app = express();
 const port = 3000;
@@ -12,10 +13,10 @@ app.use(json());
 app.get('/', (req, res) => {
     // TODO: points 랜덤 값으로 바꾸기
     const points = [
-        { x: 0, y: 0, value: 10, isActivated: 1 },
-        { x: 1, y: 0, value: 20, isActivated: 1 },
-        { x: 0, y: 1, value: 30, isActivated: 0 },
-        { x: 1, y: 1, value: 40, isActivated: 1 }
+        { x: Math.random(), y: Math.random(), value: 10, isActivated: 1 },
+        { x: Math.random(), y: Math.random(), value: 20, isActivated: 1 },
+        { x: Math.random(), y: Math.random(), value: 30, isActivated: 1 },
+        { x: Math.random(), y: Math.random(), value: 40, isActivated: 1 }
     ];
     // TODO: points value 블루투스 송신 값으로 바꾸기
     // const { rainfallValue, isActivated } = getUmbrellaData();
@@ -27,6 +28,7 @@ app.get('/', (req, res) => {
     // ];
     const results = calculateValues(points);
     generateRainfallMap(results);
+    sendDataToFirebase(results);
     const filePath = join(__dirname, 'views', 'index.html');
     res.sendFile(filePath);
 })
